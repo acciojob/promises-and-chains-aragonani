@@ -1,25 +1,39 @@
-  document.getElementById('voteForm').addEventListener('submit', function (e) {
-      e.preventDefault(); // Prevent actual form submission
+  document.addEventListener("DOMContentLoaded", function () {
+      const ageInput = document.getElementById("age");
+      const nameInput = document.getElementById("name");
+      const button = document.getElementById("btn");
 
-      const name = document.getElementById('name').value.trim();
-      const age = parseInt(document.getElementById('age').value.trim());
+      // Listen for form submission
+      button.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default form submission
 
-      // Validation
-      if (!name || isNaN(age)) {
-        alert("Please enter valid details.");
-        return;
-      }
+        const age = ageInput.value.trim();
+        const name = nameInput.value.trim();
 
-      // Promise logic
-      new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (age > 18) {
-            resolve(`Welcome, ${name}. You can vote.`);
-          } else {
-            reject(`Oh sorry ${name}. You aren't old enough.`);
-          }
-        }, 4000); // 4-second delay
-      })
-      .then(message => alert(message))
-      .catch(errorMessage => alert(errorMessage));
+        // Validation: Check if fields are empty
+        if (!age || !name) {
+          alert("Please enter valid details.");
+          return;
+        }
+
+        // Create a promise to simulate voting eligibility check
+        const checkEligibility = new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            if (parseInt(age) > 18) {
+              resolve();
+            } else {
+              reject();
+            }
+          }, 4000);
+        });
+
+        // Handle the promise result
+        checkEligibility
+          .then(function () {
+            alert(`Welcome, ${name}. You can vote.`);
+          })
+          .catch(function () {
+            alert(`Oh sorry ${name}. You aren't old enough.`);
+          });
+      });
     });
